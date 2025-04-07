@@ -1,0 +1,63 @@
+{
+  "version": 3,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 24,
+    "patch": 0
+  },
+  "configurePresets": [
+    {
+      "name": "defaults",
+      "hidden": true,
+      "binaryDir": "${sourceDir}/build/${presetName}",
+      "generator": "Ninja Multi-Config",
+      "cacheVariables": {
+        "CMAKE_CONFIGURATION_TYPES": "Debug;Release;RelWithDebInfo;MinSizeRel",
+        "HAL_NXP_BUILD_EXAMPLES": true
+      }
+    },
+    {
+      "name": "host",
+      "displayName": "host",
+      "description": "Build required tools for host",
+      "inherits": "defaults"
+    },
+    {
+      "name": "kinetis",
+      "hidden": true,
+      "inherits": "defaults",
+      "environment": {
+        "CMAKE_TOOLCHAIN_FILE": ""
+      },
+      "cacheVariables": {
+        "EMIL_GENERATE_PACKAGE_CONFIG": false,
+        "TARGET_MCU_VENDOR": "nxp"
+      }
+    },
+    {
+      "name": "MK64F",
+      "displayName": "MK64F",
+      "description": "Build for MK64F",
+      "inherits": "nxp",
+      "toolchainFile": "${sourceDir}/build/${presetName}/_deps/emil-src/cmake/toolchain-arm-gcc-m4-fpv4-sp-d16.cmake",
+      "cacheVariables": {
+        "TARGET_CORTEX": "m4",
+        "TARGET_MCU_FAMILY": "MK64F",
+        "TARGET_MCU": "MK64FN1M0VLL12",
+        "TARGET_MCU_VARIANT": "MK64FN1M0VLL12"
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "host-RelWithDebInfo",
+      "configuration": "RelWithDebInfo",
+      "configurePreset": "host"
+    },
+    {
+      "name": "MK64F-RelWithDebInfo",
+      "configuration": "RelWithDebInfo",
+      "configurePreset": "MK64F"
+    }
+  ]
+}
